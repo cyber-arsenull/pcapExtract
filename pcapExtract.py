@@ -35,8 +35,9 @@ for ts, data in pcapReader:
     # print "TCP Flags: "
     # print flags
     nodeIndex = graph_db.get_or_create_index(neo4j.Node, "NodeIndex")
-    # srcNode = nodeIndex.get_or_create("NodeIndex", "ipaddr", src, {"ipaddr": src, "fin": flags["fin"], "syn": flags["syn"], "rst": flags["rst"], "psh": flags["psh"], "ack": flags["ack"], "urg": flags["urg"], "ece": flags["ece"], "cwr":flags["cwr"]})
     srcNode = nodeIndex.get_or_create("ipaddr", src, {"ipaddr": src})
-    # dstNode = nodeIndex.get_or_create("ipaddr", dst, {"ipaddr": dst, "fin": flags["fin"], "syn": flags["syn"], "rst": flags["rst"], "psh": flags["psh"], "ack": flags["ack"], "urg": flags["urg"], "ece": flags["ece"], "cwr":flags["cwr"]})
     dstNode = nodeIndex.get_or_create("ipaddr", dst, {"ipaddr": dst})
-    graph_db.create((srcNode, "PACKET_TO", dstNode))
+    graph_db.create((srcNode, "PACKET_TO", dstNode, {"fin": flags["fin"], 
+        "syn": flags["syn"], "rst": flags["rst"], "psh": flags["psh"], 
+        "ack": flags["ack"], "urg": flags["urg"], "ece": flags["ece"], 
+        "cwr":flags["cwr"], "length":len(data)}))
